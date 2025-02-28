@@ -29,10 +29,12 @@ services:
       - ./app/screenshots:/app/screenshots
 
   flower:
-    image: mher/flower
-    command: ["flower", "--broker=redis://redis:6379/0", "--port=5555"]
-    depends_on:
-      - redis
-      - celery_worker
-    ports:
-      - "5555:5555"
+      image: mher/flower
+      environment:
+        - CELERY_BROKER_URL=redis://redis:6379/0
+      depends_on:
+        - redis
+        - celery_worker
+      ports:
+        - "5555:5555"
+
