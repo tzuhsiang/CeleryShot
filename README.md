@@ -9,6 +9,14 @@
 - Flower 任務監控
 - Docker Compose 服務整合
 
+
+## 網站範例
+網站首頁
+![目前結果](imgs/demo.png)
+
+任務查看
+![目前結果](imgs/demo2.png)
+
 ---
 
 ## 目錄結構
