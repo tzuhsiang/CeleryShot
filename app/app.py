@@ -4,6 +4,24 @@ from tasks import generate_screenshot
 
 app = Flask(__name__)
 
+@app.route("/")
+def index():
+    return """
+    <h1>歡迎來到 CeleryShot API</h1>
+    <h2>可用的 API 端點：</h2>
+    <ul style="font-size: 1.2em; line-height: 1.6;">
+        <li><strong>POST /screenshot</strong> - 建立新的截圖任務</li>
+        <li><strong>GET /task/&lt;task_id&gt;/status</strong> - 檢查任務狀態</li>
+        <li><strong>GET /screenshot/&lt;filename&gt;</strong> - 下載截圖</li>
+    </ul>
+    <p style="margin-top: 20px;">
+        使用方法：<br>
+        1. 使用 POST /screenshot 並提供 URL 來建立截圖任務<br>
+        2. 使用返回的 task_id 查詢任務狀態<br>
+        3. 當任務完成時，使用提供的下載連結取得截圖
+    </p>
+    """
+
 @app.route("/screenshot", methods=["POST"])
 def create_screenshot():
     data = request.json
@@ -24,4 +42,4 @@ def get_screenshot(filename):
     return send_file(file_path, mimetype="image/png")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(port=8000, debug=True)

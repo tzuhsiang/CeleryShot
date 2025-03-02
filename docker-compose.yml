@@ -9,24 +9,29 @@ services:
       context: .
       dockerfile: flask/Dockerfile
     ports:
-      - "6000:5000"
+      - "8000:8000"
     depends_on:
       - redis
     volumes:
-      - ./app/screenshots:/app/screenshots
+      - ./app:/app  # 這是重點，把app目錄mount到容器裡的/app
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_DEBUG=1
+    command: ["flask", "run", "--host=0.0.0.0", "--port=8000"]
 
   celery_worker:
     build:
         context: .
         dockerfile: celery/Dockerfile
-    command: ["celery", "-A", "celery_app.celery", "worker", "--loglevel=info"]
     depends_on:
       - redis
+    volumes:
+      - ./app:/app
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
-    volumes:
-      - ./app/screenshots:/app/screenshots
+
+    command: ["celery", "-A", "celery_app.celery", "worker", "--loglevel=info"]
 
   flower:
       image: mher/flower
@@ -37,4 +42,3 @@ services:
         - celery_worker
       ports:
         - "5555:5555"
-
